@@ -31,16 +31,11 @@ func main() {
 		panic(err)
 	}
 
-	db, err := database.New(cfg)
-	if err != nil {
-		panic(err)
-	}
-
 	if err := database.RunMigrations(cfg); err != nil {
 		log.Fatal(err)
 	}
 
-	repos := repository.NewRepository(db.Pool)
+	repos := repository.NewRepository(srv.Db.Pool)
 
 	services, serviceErr := service.NewServices(repos)
 	if serviceErr != nil {
