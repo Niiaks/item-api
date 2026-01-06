@@ -6,7 +6,6 @@ import (
 
 	"mastery-project/internal/handler"
 	authMiddleware "mastery-project/internal/middleware"
-	"mastery-project/internal/repository"
 
 	"github.com/go-chi/httprate"
 
@@ -16,7 +15,7 @@ import (
 
 func NewRouter(
 	h *handler.Handlers,
-	repo *repository.Repository,
+	authMW *authMiddleware.AuthMiddleware,
 ) chi.Router {
 
 	r := chi.NewRouter()
@@ -44,11 +43,6 @@ func NewRouter(
 			http.FileServer(http.Dir("uploads")),
 		),
 	)
-
-	//Auth middleware instance
-	authMW := &authMiddleware.AuthMiddleware{
-		Session: repo.Session,
-	}
 
 	//API v1
 	r.Route("/api/v1", func(r chi.Router) {

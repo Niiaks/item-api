@@ -13,6 +13,11 @@ type AuthMiddleware struct {
 	Session *repository.SessionRepository
 }
 
+func NewAuthMiddleware(sessionRepo *repository.SessionRepository) *AuthMiddleware {
+	return &AuthMiddleware{
+		Session: sessionRepo,
+	}
+}
 func (m *AuthMiddleware) Protected(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 

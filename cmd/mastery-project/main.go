@@ -8,6 +8,7 @@ import (
 	"mastery-project/internal/config"
 	"mastery-project/internal/database"
 	"mastery-project/internal/handler"
+	"mastery-project/internal/middleware"
 	"mastery-project/internal/repository"
 	"mastery-project/internal/router"
 	"mastery-project/internal/server"
@@ -44,7 +45,8 @@ func main() {
 	//setup handlers
 	handlers := handler.NewHandlers(srv, services)
 
-	r := router.NewRouter(handlers, repos)
+	authMW := middleware.NewAuthMiddleware(repos.Session)
+	r := router.NewRouter(handlers, authMW)
 
 	srv.SetupHttpServer(r)
 
