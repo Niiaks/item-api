@@ -23,4 +23,4 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /var/www/myapp
-            ./deploy.sh
+            bash -l ./deploy.sh
