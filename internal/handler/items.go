@@ -185,7 +185,7 @@ func (h *ItemHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.JSON(w, http.StatusOK, map[string]string{"message": "item updated"})
+	h.JSON(w, http.StatusNoContent, map[string]string{"message": "item updated"})
 }
 func (h *ItemHandler) ViewImage(w http.ResponseWriter, r *http.Request) {
 	filename := chi.URLParam(r, "filename")
