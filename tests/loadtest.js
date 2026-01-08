@@ -1,3 +1,5 @@
+//install k6 on local machine
+//run k6 loadtest.js (filename)
 import http from "k6/http";
 
 import { check, sleep } from "k6";
@@ -16,5 +18,6 @@ export default function () {
   check(res, {
     "status is 200 or 429": (r) => r.status === 200 || r.status === 429,
   });
+  //simulate 10req/min ratelimit
   sleep(10);
 }
