@@ -63,7 +63,7 @@ func main() {
 	<-ctx.Done()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	if err = srv.Shutdown(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+	if err = srv.Shutdown(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		slog.Error(err.Error())
 		log.Fatal(err.Error())
 	}

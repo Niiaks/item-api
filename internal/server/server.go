@@ -47,8 +47,8 @@ func (s *Server) Run() error {
 	return s.httpServer.ListenAndServe()
 }
 
-func (s *Server) Shutdown() error {
-	if err := s.httpServer.Shutdown(context.Background()); err != nil {
+func (s *Server) Shutdown(ctx context.Context) error {
+	if err := s.httpServer.Shutdown(ctx); err != nil {
 		return fmt.Errorf("http server shutdown error: %v", err)
 	}
 
