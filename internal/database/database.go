@@ -9,39 +9,11 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Database struct {
 	Pool *pgxpool.Pool
-}
-
-type multiTracer struct {
-	tracers []any
-}
-
-// TraceQueryStart implements pgx tracer interface
-func (mt *multiTracer) TraceQueryStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceQueryStartData) context.Context {
-	for _, tracer := range mt.tracers {
-		if t, ok := tracer.(interface {
-			TraceQueryStart(context.Context, *pgx.Conn, pgx.TraceQueryStartData) context.Context
-		}); ok {
-			ctx = t.TraceQueryStart(ctx, conn, data)
-		}
-	}
-	return ctx
-}
-
-// TraceQueryEnd implements pgx tracer interface
-func (mt *multiTracer) TraceQueryEnd(ctx context.Context, conn *pgx.Conn, data pgx.TraceQueryEndData) {
-	for _, tracer := range mt.tracers {
-		if t, ok := tracer.(interface {
-			TraceQueryEnd(context.Context, *pgx.Conn, pgx.TraceQueryEndData)
-		}); ok {
-			t.TraceQueryEnd(ctx, conn, data)
-		}
-	}
 }
 
 func New(cfg *config.Config) (*Database, error) {
