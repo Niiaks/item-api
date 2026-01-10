@@ -25,10 +25,6 @@ type Item struct {
 	UpdateAt    time.Time `json:"update_at"`
 }
 
-type UpdateItem struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-}
 type Session struct {
 	ID        uuid.UUID `json:"id" validate:"required"`
 	UserID    uuid.UUID `json:"user_id" validate:"required"`
@@ -36,6 +32,12 @@ type Session struct {
 	EXPIRESAt time.Time `json:"expires_at" validate:"required"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdateAt  time.Time `json:"update_at"`
+}
+
+// Request and Response Models
+type UpdateItem struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
 }
 
 type CreateUserRequest struct {
