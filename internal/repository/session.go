@@ -20,6 +20,7 @@ type SessionRepo interface {
 	DeleteSession(ctx context.Context, session *model.Session) error
 	GetSession(ctx context.Context, sessionID string) (string, error)
 	GetUserBySessionID(ctx context.Context, sessionID string) (*model.User, error)
+	DeleteUserSession(ctx context.Context, userID string) error
 }
 
 func NewSessionRepository(pool *pgxpool.Pool) *SessionRepository {
@@ -92,4 +93,13 @@ func (r *SessionRepository) GetUserBySessionID(
 	}
 
 	return &user, nil
+}
+
+func (r *SessionRepository) DeleteUserSession(ctx context.Context, userID string) error {
+	sql := `DELETE FROM sessions WHERE user_id = $1`
+	_, err := r.pool.Exec(ctx, sql, userID)
+	if err != nil {
+		return fmt.Errorf("delete user sessions: %w", err)
+	}
+	return nil
 }

@@ -13,6 +13,7 @@ func registerSystemRoutes(r chi.Router, h *handler.Handlers) {
 func registerAuthRoutes(r chi.Router, h *handler.Handlers) {
 	r.Post("/login", h.Auth.Login)
 	r.Post("/register", h.Auth.Signup)
+	r.Get("/logout", h.Auth.Logout)
 }
 
 func registerItemRoutes(r chi.Router, h *handler.Handlers) {

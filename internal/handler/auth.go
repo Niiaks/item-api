@@ -74,3 +74,38 @@ func (h *AuthHandler) Signup(w http.ResponseWriter, r *http.Request) {
 	}
 	h.JSON(w, http.StatusOK, response)
 }
+
+func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("sessionToken")
+	if err != nil {
+		h.JSON(w, http.StatusBadRequest, "no session found")
+		return
+	}
+	sessionID := cookie.Value
+
+	ctx := r.Context()
+	user, err := h.AuthService.GetUserBySessionID(ctx, sessionID)
+	if err != nil {
+		h.JSON(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = h.AuthService.Logout(ctx, user.ID.String())
+	if err != nil {
+		h.JSON(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	//delete cookie
+	clearedCookie := &http.Cookie{
+		Name:     "sessionToken",
+		Value:    "",
+		Path:     "/",
+		SameSite: http.SameSiteLaxMode,
+		HttpOnly: true,
+		Secure:   h.env == "production",
+	}
+	http.SetCookie(w, clearedCookie)
+
+	h.JSON(w, http.StatusOK, "logged out successfully")
+}

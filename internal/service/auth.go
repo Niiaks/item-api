@@ -89,6 +89,23 @@ func (auth *AuthService) Register(ctx context.Context, request model.CreateUserR
 	return response, nil
 }
 
+func (auth *AuthService) Logout(ctx context.Context, userID string) error {
+	//delete all user sessions from db
+	err := auth.sessionRepo.DeleteUserSession(ctx, userID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (auth *AuthService) GetUserBySessionID(ctx context.Context, sessionID string) (*model.User, error) {
+	user, err := auth.sessionRepo.GetUserBySessionID(ctx, sessionID)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
 func GenerateSessionID() string {
 	key := rand.Text()
 	return base64.URLEncoding.EncodeToString([]byte(key))
